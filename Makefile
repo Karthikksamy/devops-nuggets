@@ -53,7 +53,7 @@ lint:
 	#TODO:
 	#oclint $(LINT_SRC) $(CPP_FLAGS) $(INCLUDES)
 
-.PHONY: docker autogen autogen_test
+.PHONY: docker autogen autogen_test docker_test
 
 autogen:
 	@echo "Auto generating the c file, based on descriptor time_res.json"
@@ -70,12 +70,17 @@ autogen_test:
 	g++ -o $(EXE) $(AUTOGEN_OBJS) $(CPP_OBJS)
 
 docker:
-	@echo "Building and running the application in " $(@)
-	#@echo " I am running as `whoami`. My id is `id -u` "
-	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gcc-make make autogen_test
+	@echo "  Building and running the application with default c main in docker"
+	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app karthikksamy/amp-env:1.0 make autogen
 	@echo "Build Complete !\n Opening the docker shell \n To execute the application type: ./runme "
-	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gcc-make /bin/bash
+	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app karthikksamy/amp-env:1.0 /bin/bash
 #	@echo "$(lastword $(MAKECMDGOALS))"
+
+docker_test:
+	@echo "  Building and running the application with catch2 unit test framework in docker"
+	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app karthikksamy/amp-env:1.0 make autogen_test
+	@echo "Build Complete !\n Opening the docker shell \n To execute the application type: ./runme "
+	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app karthikksamy/amp-env:1.0 /bin/bash
 
 # TODO: Update the hard coded file names with autofill
 
