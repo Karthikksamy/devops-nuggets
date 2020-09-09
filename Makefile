@@ -73,7 +73,7 @@ docker:
 	@echo "running make for" $(@)
 	@echo " I am running as `whoami`. My id is `id -u` "
 	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gcc-make make autogen_test
-	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gcc-make make autogen		
+	@echo "Build Complete !\n Opening the docker shell \n To execute the application type: ./runme "
 	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gcc-make /bin/bash
 #	@echo "$(lastword $(MAKECMDGOALS))"
 
