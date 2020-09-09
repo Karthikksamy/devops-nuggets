@@ -12,3 +12,7 @@
 
 7. Makefile: Genralaize for creating output in the object directory
 
+8. Generator.py: Check if bit_length and respective datatype are matching and 
+
+9. Generator.py:  Check if this data type and fit in the remaining space
+

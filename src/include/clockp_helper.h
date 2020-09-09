@@ -43,27 +43,10 @@ static inline uint64_t extract_field(uint8_t *buffer, uint8_t start, uint8_t len
     
     return ( ( ( ( (((uint64_t)(0x1) << len)-1) \
         << start) \
-        & *(uint32_t*)buffer ) \
-        >> start ) \
-        + offset);           
-}
-
-/*! extract_field with 8Byte buffer as input- 
-
-    1. create a template of 1's for given length of field - (((uint64_t)(0x1) << len)-1)
-    2. move the field to given start position             - << start
-    3. Extract the field using mask,                      - & *(uint64_t*)buffer
-    4. move back the extracted field to start             - >> start
-    5. add the offset to extracted data     
-
-*/
-static inline uint64_t extract_field_8b(uint8_t *buffer, uint8_t start, uint8_t len, uint32_t offset){
-    
-    return ( ( ( ( (((uint64_t)(0x1) << len)-1) \
-        << start) \
         & *(uint64_t*)buffer ) \
         >> start ) \
         + offset);           
 }
+
 
 #endif /* CLOCKP_HELPER_H */

@@ -51,7 +51,12 @@ void time_res_pack( const struct time_res_t *const input,
 }
 
 /*!
-  Deserialize the stream of Bytes into a c structure
+  Deserialize the stream of Bytes into a 'c' structure
+
+  ASSUMPTION: 
+   Input pointer is of length 4B for simple C based implementation
+   In the auto-generated version, the byte stream 
+
 */
 void time_res_unpack( const uint8_t *const ip, struct time_res_t *const output){
 
@@ -60,7 +65,7 @@ void time_res_unpack( const uint8_t *const ip, struct time_res_t *const output){
 	assert(output != NULL);
 
 	//TODO 1: To memcopy based on RAW stream size
-	memcpy(input, ip, 4);
+	memcpy(input, ip, BUFFER_SZ_BYTES);
 
 	// uint64_t extract_field(uint64_t buffer, uint8_t start, uint8_t len, uint32_t offset)
 	output->year = extract_field(input, 0, 6, 2000);

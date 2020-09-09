@@ -11,10 +11,6 @@ from dataclasses import dataclass
 from bottle import template as btl_template #The templating library
 
 
-#class Generator(object):
-#	'A tool kit to generate C code from json inputs'
-
-
 @dataclass(order=False, unsafe_hash=False, frozen=False)
 class Desc_Fields:
 	'''The unique fields in the given descriptor file, assuming a 8 Byte stream
@@ -57,6 +53,8 @@ class Desc_Fields:
 			raise ValueError("The supported scale is only 1")
 		if self.c_type not in {"uint8_t", "uint16_t", "uint32_t", "uint64_t"}:
 			raise ValueError("Invalid c datatype is provided")
+		#TODO 8: Check if bit_length and respective datatype are matching and \
+		#TODO 9:  Check if this data type and fit in the remaining space
 
 
 if __name__ == '__main__':
@@ -73,13 +71,13 @@ if __name__ == '__main__':
 	#pprint(desc)
 
 	with open('./scripts/template.txt','r') as f:
-		clk_template = f.read()
-	clk_template = clk_template.replace("A TEMPLATE FILE","AN AUTO-GENERATED FILE",) 
+		c_template = f.read()
+	c_template = c_template.replace("A TEMPLATE FILE","AN AUTO-GENERATED FILE",) 
 
 	#print(btl_template(clk_template,desc=desc))
 
 	with open('./src/clockp_autogen.c','w+') as f:
-		f.write(btl_template(clk_template,desc=desc))
+		f.write(btl_template(c_template,desc=desc,max_size=4))
 
 	print("successfully generated the source file ./src/clockp_autogen.c ")
 

@@ -9,7 +9,7 @@
 
 
 #define BYTE_SZ_BITS (8)
-#define BUFFER_SZ_BYTES (4)
+#define BUFFER_SZ_BYTES ({{max_size}})
 
 /*!
   Serialize the given input structure to Byte stream
@@ -44,7 +44,7 @@ void time_res_unpack( const uint8_t *const ip, struct time_res_t *const output){
 	assert(output != NULL);
 
 	//TODO 1: To memcopy based on RAW stream size
-	memcpy(input, ip, 4);
+	memcpy(input, ip, BUFFER_SZ_BYTES);
 
 % for field in desc:
 	output->{{field.name}} = extract_field(input, {{field.start_bit}}, {{field.bit_length}}, {{field.offset}});
