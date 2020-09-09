@@ -1,0 +1,87 @@
+//THIS IS A TEMPLATE FILE. DO NOT MODIFY IT !!
+#include <stdio.h>
+#include <assert.h>
+#include <string.h> //for memcpy
+
+
+#include <clockp.h>
+#include <clockp_helper.h>
+
+
+#define BYTE_SZ_BITS (8)
+#define BUFFER_SZ_BYTES (4)
+
+/*!
+  Serialize the given input structure to Byte stream
+*/
+void time_res_pack( const struct time_res_t *const input,
+    				uint8_t *const output ) {
+	uint64_t temp=0;
+	/* Input validation */ 
+	assert(input != NULL);
+	assert(output != NULL);
+
+
+	//clear the output variable
+	temp = encode_bitmask(0,0,BUFFER_SZ_BYTES*BYTE_SZ_BITS,0);
+
+% for field in desc:
+	temp |= encode_bitmask(input->{{field.name}},{{field.start_bit}},{{field.bit_length}},{{field.offset}});
+%end
+
+	memcpy(output, &temp, BUFFER_SZ_BYTES);
+
+	return;
+}
+
+/*!
+  Deserialize the stream of Bytes into a c structure
+*/
+void time_res_unpack( const uint8_t *const ip, struct time_res_t *const output){
+
+	uint8_t input[8];
+	assert(ip != NULL);
+	assert(output != NULL);
+
+	//TODO 1: To memcopy based on RAW stream size
+	memcpy(input, ip, 4);
+
+% for field in desc:
+	output->{{field.name}} = extract_field(input, {{field.start_bit}}, {{field.bit_length}}, {{field.offset}});
+
+%end
+
+	return;
+}
+
+#ifdef INCLUDE_MAIN
+int main(int argc, char *argv[] ){
+	uint8_t packed_time_res[4u] = {0x54, 0x86, 0xA1, 0xD5}; 
+	struct time_res_t time_res = {0};
+	struct time_res_t ip = {2020,9,1,3,26,53};
+	uint8_t packed_op[4]={0,0,0,0};
+
+	time_res_pack(&ip, packed_op);
+
+	printf("packed_op %x \n", *(uint32_t*)packed_op);
+
+	time_res_unpack(packed_time_res, &time_res);
+	printf("unpacked output :\n");
+	printf("year : %d \n", time_res.year );
+	printf("month : %d \n", time_res.month );
+	printf("day : %d \n", time_res.day );
+	printf("hour : %d \n", time_res.hour );
+	printf("minutes : %d \n", time_res.minute );
+	printf("sec : %d \n", time_res.second );
+
+	assert(time_res.year == 2020); 
+	assert(time_res.month == 9); 
+	assert(time_res.day == 1); 
+	assert(time_res.hour == 3); 
+	assert(time_res.minute == 26); 
+	assert(time_res.second == 53);
+
+
+	return 0;	
+}
+#endif

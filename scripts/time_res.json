@@ -1,0 +1,53 @@
+{
+  "name": "time_res",
+  "fields": [
+    {
+      "name": "year",
+      "start_bit": 0,
+      "bit_length": 6,
+      "offset": 2000,
+      "scale": 1,
+      "c_type": "uint16_t"
+    },
+    {
+      "name": "month",
+      "start_bit": 6,
+      "bit_length": 4,
+      "offset": 0,
+      "scale": 1,
+      "c_type": "uint8_t"
+    },
+    {
+      "name": "day",
+      "start_bit": 10,
+      "bit_length": 5,
+      "offset": 0,
+      "scale": 1,
+      "c_type": "uint8_t"
+    },
+    {
+      "name": "hour",
+      "start_bit": 15,
+      "bit_length": 5,
+      "offset": 0,
+      "scale": 1,
+      "c_type": "uint8_t"
+    },
+    {
+      "name": "minute",
+      "start_bit": 20,
+      "bit_length": 6,
+      "offset": 0,
+      "scale": 1,
+      "c_type": "uint8_t"
+    },
+    {
+      "name": "second",
+      "start_bit": 26,
+      "bit_length": 6,
+      "offset": 0,
+      "scale": 1,
+      "c_type": "uint8_t"
+    }
+  ]
+}

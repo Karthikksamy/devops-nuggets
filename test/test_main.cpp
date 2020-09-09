@@ -3,19 +3,8 @@
 #include <clockp.h>
 
 uint8_t ip[4u]= {0x54, 0x86, 0xA1, 0xD5};
-struct time_res_t unpack_result;
+struct time_res_t unpack_result={0};
 
-#if 0
-void time_res_pack(
-    const struct time_res_t *const input,
-    uint8_t *const output
-);
-
-void time_res_unpack(
-    const uint8_t *const input,
-    struct time_res_t *const output
-);
-#endif
 
 TEST_CASE("4Byte unpacking ","[time_res_unpack]")
 {
@@ -28,26 +17,3 @@ TEST_CASE("4Byte unpacking ","[time_res_unpack]")
 	REQUIRE(unpack_result.minute==26);
 }
 
-
-#if 0
-SCENARIO("4Byte unpacking ","[time_res_unpack]"){
-
-	GIVEN("clock protocol unpacked "){
-		struct time_res_t unpack_result;
-
-		WHEN("4Byte value given"){
-			time_res_unpack({0x54, 0x86, 0xA1, 0xD5},&unpack_result);
-
-			THEN("Result is "){
-				REQUIRE(unpack_result.year==2020);
-			}
-
-		}
-	}
-}
-
-Karthik@MacBook-Pro-3 part_1 % g++ -c test.cpp  -std=c++17 -I.
-Karthik@MacBook-Pro-3 part_1 % g++ -o runme test.o clockp.o
-Karthik@MacBook-Pro-3 part_1 % g++ -c clockp.c -std=c++17 -I.
-
-#endif

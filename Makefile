@@ -2,7 +2,7 @@
 
 #Listing down all the rules, to ensure their execution 
 #irrespective of existing file in the Makefile location
-.PHONY: deploy test clean default lint
+.PHONY: deploy test clean default lint docker
 
 EXE?= runme
 
@@ -51,6 +51,16 @@ lint:
 	#TODO:
 	#oclint $(LINT_SRC) $(CPP_FLAGS) $(INCLUDES)
 
+.PHONY: docker autogen
+docker:
+	@echo "current directory is $(shell pwd)"
+	$(shell pwd)
+	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gxx-make make
+
+autogen:
+	@echo "Auto generating the file based on descriptor time_res.json"
+	python scripts/generator.py
+	gcc $(C_FLAGS) $(INCLUDES) './src/clockp_autogen.c' -DINCLUDE_MAIN -o $(EXE)
 
 # TODO: Update the hard coded file names with autofill
 
