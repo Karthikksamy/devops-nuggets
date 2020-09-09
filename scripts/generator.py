@@ -9,7 +9,7 @@
 
 from dataclasses import dataclass
 from bottle import template as btl_template #The templating library
-
+from typing import ClassVar 
 
 @dataclass(order=False, unsafe_hash=False, frozen=False)
 class Desc_Fields:
@@ -35,11 +35,15 @@ class Desc_Fields:
 	offset: int
 	scale: int 
 	c_type: str
+	total_len:ClassVar[int] = 0# field(init=False, repr=False)
 
 	def __post_init__(self):
+		Desc_Fields.total_len = Desc_Fields.total_len + self.bit_length 
+		if Desc_Fields.total_len > 64:
+			raise ValueError("Total buffersize cannot be longer than 64 i.e 8Bytes ")
 		#TODO: Remove Magic number 63 with constant
 		if self.start_bit > 63:
-			raise ValueError("start_bit cannot be longer than 63 i.e 8Bytes")
+			raise ValueError("start_bit cannot be longer than 63 i.e MSb of 8Bytes")
 		if self.start_bit < 0:
 			raise ValueError("start_bit cannot be lesser than 0")
 		if self.bit_length < 0:
@@ -56,29 +60,45 @@ class Desc_Fields:
 		#TODO 8: Check if bit_length and respective datatype are matching and \
 		#TODO 9:  Check if this data type and fit in the remaining space
 
+def generator(	desc_file: str = './scripts/time_res.json',
+				template_file: str = './scripts/template.txt',
+				autogen_file: str = './src/clockp_autogen.c' ):
+	print("Starting Generator.py with ", args.desc_file)
 
-if __name__ == '__main__':
-	import json
-	from pprint import pprint
-
-	print("Starting Generator.py")
-
-	with open('./scripts/time_res.json') as f:
+	with open(desc_file) as f:
 		descriptor = json.load(f)
 
 	desc = [Desc_Fields(*fields.values()) for fields in descriptor['fields'] ]
 	print("Parsed json descriptor:")
 	#pprint(desc)
 
-	with open('./scripts/template.txt','r') as f:
-		c_template = f.read()
-	c_template = c_template.replace("A TEMPLATE FILE","AN AUTO-GENERATED FILE",) 
+	with open(template_file,'r') as f:
+		c_template_str = f.read()
+	c_template_str = c_template_str.replace("A TEMPLATE FILE","AN AUTO-GENERATED FILE") 
 
-	#print(btl_template(clk_template,desc=desc))
+	#print(btl_template(c_template_str,desc=desc))
 
-	with open('./src/clockp_autogen.c','w+') as f:
-		f.write(btl_template(c_template,desc=desc,max_size=4))
+	with open(autogen_file,'w+') as f:
+		msg_size_bytes = 4 if Desc_Fields.total_len <= 32 else 8
+		f.write(btl_template(c_template_str,desc=desc,max_size=msg_size_bytes))
 
 	print("successfully generated the source file ./src/clockp_autogen.c ")
+
+if __name__ == '__main__':
+	import json
+	from pprint import pprint
+	import argparse
+
+	parser = argparse.ArgumentParser(description='')
+
+	parser.add_argument('--desc_file', type=str,
+		help='Input Descriptor json file with path e.g ./scripts/time_res.json',
+		default='./scripts/time_res.json')
+
+	args = parser.parse_args()
+
+	generator(args.desc_file)
+
+
 
 

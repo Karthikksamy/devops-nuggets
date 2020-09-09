@@ -70,8 +70,8 @@ autogen_test:
 	g++ -o $(EXE) $(AUTOGEN_OBJS) $(CPP_OBJS)
 
 docker:
-	@echo "running make for" $(@)
-	@echo " I am running as `whoami`. My id is `id -u` "
+	@echo "Building and running the application in " $(@)
+	#@echo " I am running as `whoami`. My id is `id -u` "
 	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gcc-make make autogen_test
 	@echo "Build Complete !\n Opening the docker shell \n To execute the application type: ./runme "
 	@docker run -it --rm --name my-env -v "$(shell pwd)":/usr/src/app -w /usr/src/app py3-gcc-make /bin/bash

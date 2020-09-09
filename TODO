@@ -1,18 +1,22 @@
-1. clockp.c : To memcopy based on stream size either 4B or 8B. The difference, make the code little bit more error prone
+1. clockp.c : To memcopy based on stream size either 4B or 8B. Done
 
 2. Makefile: lint: enable oclint
 
-3. Makefile: Run applications in a separate container, from makefile
+3. Makefile: Run applications in a separate container, from makefile. Done
 
-4. Makefile: update python autogeneration from makefile
+4. Makefile: update python autogeneration from makefile. Done
 
-5. generator: Generalize for non clock tags in json. This would affect the max size assertion
+5. generator: Generalize for non clock tags in json. This would affect the max size assertion. Done
 
-6. Makefile: Generalize for all files in directory. 
+6. Makefile: Generalize for all files in directory, instead of Manual addition 
 
-7. Makefile: Genralaize for creating output in the object directory
+7. Makefile: Generalize for creating output in the object directory, for better organization
 
 8. Generator.py: Check if bit_length and respective datatype are matching and 
 
-9. Generator.py:  Check if this data type and fit in the remaining space
+9. Generator.py:  Check if this c_type of data field can fit in the remaining space of total 64bit space
+
+10. Generator.py: lint: Run python liniting on the code
+
+11. Generator.py: doc_test. update the method doc strings for doc_test 
 
