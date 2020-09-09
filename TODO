@@ -1,0 +1,14 @@
+1. clockp.c : To memcopy based on stream size either 4B or 8B. The difference, make the code little bit more error prone
+
+2. Makefile: lint: enable oclint
+
+3. Makefile: Run applications in a separate container, from makefile
+
+4. Makefile: update python autogeneration from makefile
+
+5. generator: Generalize for non clock tags in json. This would affect the max size assertion
+
+6. Makefile: Generalize for all files in directory. 
+
+7. Makefile: Genralaize for creating output in the object directory
+
